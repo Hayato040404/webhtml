@@ -11,6 +11,26 @@
     <button id="fetchButton">Fetch HTML</button>
     <div id="htmlContent"></div>
 
-    <script src="script.js"></script>
+    <script>
+        document.getElementById('fetchButton').addEventListener('click', () => {
+            const url = document.getElementById('urlInput').value;
+            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}`;
+
+            fetch(proxyUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    document.getElementById('htmlContent').innerHTML = data.contents;
+                })
+                .catch(error => {
+                    console.error('Error fetching the HTML:', error);
+                    document.getElementById('htmlContent').innerHTML = `<p style="color: red;">Error fetching the HTML. Please check the console for more details.</p>`;
+                });
+        });
+    </script>
 </body>
 </html>
